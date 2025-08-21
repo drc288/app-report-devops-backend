@@ -2,6 +2,7 @@ from functools import lru_cache
 from fastapi import APIRouter, Depends
 from typing_extensions import Annotated
 
+from ..modules import github
 from ..schemas import settings
 
 router = APIRouter(
@@ -16,11 +17,13 @@ def get_settings():
 
 
 @router.get("/")
-async def get_items(config: Annotated[settings.Settings, Depends(get_settings)]):
-    return {"status": f"{config.github_org}"}
+async def get_items():
+    return {"status": "yes"}
 
-@router.post("/sync/")
-async def sync_github():
+@router.get("/sync/")
+async def sync_github(config: Annotated[settings.Settings, Depends(get_settings)]):
+    repos = await github.get_repos(config.github_org, config.github_token)
+    print(repos)
     return {"status": "complete"}
 
 @router.get("/{repositorio}")
