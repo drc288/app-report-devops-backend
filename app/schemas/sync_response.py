@@ -3,5 +3,7 @@ from pydantic import BaseModel
 
 class SyncRepository(BaseModel):
     status: str
-    count: int
-    repositories: List[str]
+    newRepositories: List[str]
+    newRepositoriesCount: int
+    deletedRepositories: List[str]
+    deletedRepositoriesCount: int
