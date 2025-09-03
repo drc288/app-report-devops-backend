@@ -44,7 +44,7 @@ cd app-report-devops-backend
 ```bash
 uv venv
 source .venv/bin/activate  # En Windows usar: .venv\Scripts\activate
-uv pip install -e .
+uv sync
 ```
 
 ### Configuración
