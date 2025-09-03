@@ -6,15 +6,15 @@ from bson import ObjectId
 from ..modules.pyobject_mongo import PyObjectId
 
 class Github(BaseModel):
-    active: bool
-    github_flow: bool
+    active: Optional[bool] = None
+    github_flow: Optional[bool] = None
 
 class Backstage(BaseModel):
-    active: bool
-    tech_docs: bool
-    sonar: bool
-    datadog: bool
-    github_actions: bool
+    active: Optional[bool] = None
+    tech_docs: Optional[bool] = None
+    sonar: Optional[bool] = None
+    datadog: Optional[bool] = None
+    github_actions: Optional[bool] = None
 
 class RepositoryBase(BaseModel):
     """
@@ -47,3 +47,7 @@ class Repository(RepositoryBase):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+
+class RepositoryCollection(BaseModel):
+    count: int
+    repositories: list[RepositoryInDB]

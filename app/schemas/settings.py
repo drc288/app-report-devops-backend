@@ -5,4 +5,6 @@ class Settings(BaseSettings):
     github_token: str
     mongo_string_connection: str
     mongo_collection_name: str
+    backstage_token: str
+    cors_origins: str
     model_config = SettingsConfigDict(env_file=".env")

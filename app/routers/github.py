@@ -3,7 +3,7 @@ from pymongo.cursor import List
 from fastapi import APIRouter, Depends, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from ..schemas import sync_response
+from ..schemas import sync_response, repository
 from ..db.mongo import get_mongodb
 from ..db.github_commands import GithubCommands
 
@@ -14,6 +14,26 @@ router = APIRouter(
 )
 
 github_commands = GithubCommands()
+
+@router.get(
+    "/",
+    description="Get all repositories",
+    status_code=status.HTTP_200_OK,
+    response_model=repository.RepositoryCollection,
+)
+async def get_repositories(
+    db: AsyncIOMotorDatabase = Depends(get_mongodb)
+):
+    """
+    Get all repositories from MongoDB.
+    """
+    return await github_commands.get_all(db)
+
+@router.get(
+    "/test"
+)
+async def test():
+    return await github_commands.backstage_get_repositories()
 
 @router.get(
     "/active-repositories",

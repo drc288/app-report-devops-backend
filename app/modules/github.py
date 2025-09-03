@@ -41,9 +41,24 @@ class GithubClient:
 
     async def get_repository_contributors(self, repo_name) -> list[str]:
         headers = self.header()
+        print(repo_name)
         try:
             async with httpx.AsyncClient(base_url=self.api_url, headers=headers, timeout=10) as client:
                 r = await client.get(f"/repos/{self.settings.github_org}/{repo_name}/contributors")
+                if r.status_code == 404:
+                    raise HTTPException(404, f"Repository {repo_name} not found")
                 return [contributor["login"] for contributor in r.json()]
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(e.response.status_code, e.response.text)
+
+    async def have_github_actions(self, repo_name) -> bool:
+        headers = self.header()
+        try:
+            async with httpx.AsyncClient(base_url=self.api_url, headers=headers, timeout=10) as client:
+                r = await client.get(f"/repos/{self.settings.github_org}/{repo_name}/actions/runs")
+                if r.status_code == 404:
+                    raise HTTPException(404, f"Repository {repo_name} not found")
+                have_actions_running = r.json()["total_count"] > 0
+                return have_actions_running
         except httpx.HTTPStatusError as e:
             raise HTTPException(e.response.status_code, e.response.text)
