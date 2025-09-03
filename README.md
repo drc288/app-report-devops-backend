@@ -35,7 +35,7 @@ El sistema utiliza MongoDB para almacenar datos de repositorios y proporciona un
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/drc288/app-report-devops-backend.git
+git clone https://github.com/the-palace-company/app-report-devops-backend.git
 cd app-report-devops-backend
 ```
 
