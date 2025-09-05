@@ -45,9 +45,10 @@ class GithubClient:
         try:
             async with httpx.AsyncClient(base_url=self.api_url, headers=headers, timeout=10) as client:
                 r = await client.get(f"/repos/{self.settings.github_org}/{repo_name}/contributors")
-                if r.status_code == 404:
-                    raise HTTPException(404, f"Repository {repo_name} not found")
-                return [contributor["login"] for contributor in r.json()]
+                if r.status_code == 404 or r.status_code == 204:
+                    return []
+                contributors = [contributor["login"] for contributor in r.json()]
+                return contributors
         except httpx.HTTPStatusError as e:
             raise HTTPException(e.response.status_code, e.response.text)
 
