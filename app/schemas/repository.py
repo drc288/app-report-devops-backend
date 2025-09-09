@@ -9,6 +9,9 @@ class Github(BaseModel):
     active: Optional[bool] = None
     github_flow: Optional[bool] = None
 
+class SonarCloudInfo(BaseModel):
+    active: Optional[bool] = None
+
 class Backstage(BaseModel):
     active: Optional[bool] = None
     tech_docs: Optional[bool] = None
@@ -24,6 +27,7 @@ class RepositoryBase(BaseModel):
     contributors: Optional[list[str]]
     backstage: Optional[Backstage]
     github: Optional[Github]
+    sonarcloud: Optional[SonarCloudInfo] = None
 
 class RepositoryInDB(RepositoryBase):
     """
