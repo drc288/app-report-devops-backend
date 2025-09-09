@@ -56,11 +56,18 @@ class GithubCommands(GithubClient, Backstage):
             active_backsatge = repo in backstage_repos
             have_github_actions = await self.have_github_actions(repo)
             contributors = await self.get_repository_contributors(repo)
+            have_tech_docs = await self.have_tech_docs(repo)
+            have_github_actions = await self.have_github_actions(repo)
+            have_datadog = await self.have_datadog(repo)
             new_repo = repository.RepositoryInDB(
                 name=repo,
                 contributors=contributors,
                 backstage=repository.Backstage(
-                    active=active_backsatge
+                    active=active_backsatge,
+                    tech_docs=have_tech_docs,
+                    sonar=await self.have_sonar(repo),
+                    github_actions=have_github_actions,
+                    datadog=have_datadog
                 ),
                 github=repository.Github(
                     active=have_github_actions
