@@ -69,7 +69,7 @@ class GithubCommands(GithubClient, Backstage):
                 except Exception:
                     has_sonarcloud = False
             have_tech_docs = await self.have_tech_docs(repo)
-            have_github_actions = await self.have_github_actions(repo)
+            have_github_actions_annotations = await self.have_github_actions_annotations(repo)
             have_datadog = await self.have_datadog(repo)
             new_repo = repository.RepositoryInDB(
                 name=repo,
@@ -78,7 +78,7 @@ class GithubCommands(GithubClient, Backstage):
                     active=active_backsatge,
                     tech_docs=have_tech_docs,
                     sonar=await self.have_sonar(repo),
-                    github_actions=have_github_actions,
+                    github_actions=have_github_actions_annotations,
                     datadog=have_datadog
                 ),
                 github=repository.Github(

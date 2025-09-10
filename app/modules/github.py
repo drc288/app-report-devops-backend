@@ -58,7 +58,7 @@ class GithubClient:
                 r = await client.get(f"/repos/{self.settings.github_org}/{repo_name}/actions/runs")
                 if r.status_code == 404:
                     raise HTTPException(404, f"Repository {repo_name} not found")
-                have_actions_running = r.json().get("total_count", 0) > 0
+                have_actions_running = r.json()["total_count"] > 0
                 return have_actions_running
         except httpx.HTTPStatusError as e:
             raise HTTPException(e.response.status_code, e.response.text)
@@ -99,7 +99,7 @@ class GithubClient:
         except Exception as e:
             raise HTTPException(500, f"Unexpected error: {e}")
 
-    async def have_github_actions(self, repo_name: str) -> bool:
+    async def have_github_actions_annotations(self, repo_name: str) -> bool:
         headers = self.header()
         filenames = ["catalog-info.yaml", "catalog-info.yml"]
         try:

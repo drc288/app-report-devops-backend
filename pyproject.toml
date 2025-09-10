@@ -10,4 +10,5 @@ dependencies = [
     "motor>=3.7.1",
     "pydantic-settings>=2.10.1",
     "pymongo>=4.14.1",
+    "requests>=2.32.5",
 ]
