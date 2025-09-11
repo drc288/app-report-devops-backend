@@ -29,3 +29,4 @@ class SonarCloudChecker:
             return False
         else:
             response.raise_for_status()
+            return False
