@@ -9,12 +9,12 @@ class Settings(BaseSettings):
     cors_origins: str
     sonarcloud_token: str
     sonarcloud_org: str
-    
+
     # GitHub App Configuration
-    github_app_id: str = "1143404"
-    github_app_client_id: str = "Iv23licDkw8EkuFXA0kx"
+    github_app_id: str
+    github_app_client_id: str
     github_app_private_key_path: str = "devops.pem"
     github_app_installation_id: str = ""  # Optional, will be auto-detected if empty
     use_github_app: bool = True  # Flag to enable/disable GitHub App auth
-    
+
     model_config = SettingsConfigDict(env_file=".env")
