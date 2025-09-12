@@ -1,0 +1,128 @@
+pr-chart:
+  environment: qa
+  # Definicion de la configuracion del servicio
+  deployment:
+    # Numero de replicas del microservicio
+    replicaCount: 1
+    image:
+      url: https://qa-ecr # Este valor se reemplazara en el CI
+      name: "ms-test" # Este valor se reemplazara en el CI
+      tag: 0.0.1 # Este valor se reemplazara en el CI
+    resources:
+      limits:
+        cpu: 200m
+        memory: 200Mi
+      requests:
+        cpu: 50m
+        memory: 200Mi
+      # Example (replace readinessProbe: {} with the following):
+      readinessProbe:
+        httpGet:
+          path: /health/ready
+          port: http
+        initialDelaySeconds: 3
+        periodSeconds: 5
+      # Example (replace livenessProbe: {} with the following)::
+      livenessProbe:
+        httpGet:
+          path: /health/live
+          port: http
+        initialDelaySeconds: 40
+        periodSeconds: 10
+    nodeSelector:
+      nodeGroup: general-purpose-tpc
+    # Example (replace nodeSelector: {} with the following):
+    # nodeSelector:
+    #   group: test
+    labels: {}
+
+    env:
+      - name: DD_DATA_STREAMS_ENABLED
+        value: "true"
+      - name: DD_ENV
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tags.datadoghq.com/env']
+      - name: DD_SERVICE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tags.datadoghq.com/service']
+      - name: DD_VERSION
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tags.datadoghq.com/version']
+
+  service:
+    type: ClusterIP
+    port: 80
+    containerPort: 80
+    grpcPort: 5001
+    grpcContainerPort: 5001
+
+  hpa:
+    # Escalado horizontal
+    # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 50
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 50
+
+  configMap:
+    data: {}
+    # Example (replace data: {} with the following):
+    # data:
+    #   key: value
+
+  secrets:
+    data: {}
+    # Example (replace data: {} with the following):
+    # data:
+    #   key: value
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Automatically mount a ServiceAccount's API credentials?
+    automount: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  virtualService:
+    create: true
+    spec:
+      hosts:
+        - operations.palaceresorts-qa.com
+      gateways:
+        - istio-system/operations-gateway
+      http:
+        - name: ms-boilerplate
+          match:
+            - uri:
+                prefix: /boilerplate/
+          route:
+            - destination:
+                host: ms-devops-report.devops.svc.cluster.local
+                port:
+                  number: 80
+
+  flagger:
+    enabled: false
+    healthPath: /api/Company/Echo
+    analysis:
+      interval: 20s
+      threshold: 5

@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import github
+from .routers import github, health
 from .db.mongo import mongodb
 from .schemas.settings import Settings
-from .modules.github import GithubClient  # agregado
 
 app = FastAPI()
 settings = Settings()
@@ -28,4 +27,5 @@ async def shutdown():
     await mongodb.close()
 
 app.include_router(github.router)
+app.include_router(health.router)
 
