@@ -1,0 +1,26 @@
+name: CD - EKS - ms-devops-frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Selecciones el entorno a desplegar"
+        required: true
+        default: "qa"
+        type: choice
+        options:
+          - qa
+          - prod
+      tag:
+        description: "Ingrese el tag a desplegar"
+        required: true
+        type: string
+
+jobs:
+  CD:
+    name: CD - ${{ inputs.environment }}
+    uses: the-palace-company/github-actions/.github/workflows/cd-eks-main.yml@main
+    with:
+      ENVIRONMENT: ${{ inputs.environment }}
+      IMAGE_TAG: ${{ inputs.tag }}
+    secrets: inherit

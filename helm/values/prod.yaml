@@ -103,7 +103,7 @@ pr-chart:
     name: ""
 
   virtualService:
-    create: true
+    create: false
     spec:
       hosts:
         - cross-tools.palaceresorts.com
