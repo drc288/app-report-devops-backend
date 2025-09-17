@@ -1,0 +1,8 @@
+apiVersion: v2
+name: ms-devops-backend
+# Version de la aplicacion
+version: 0.1.0
+dependencies:
+  - name: pr-chart
+    version: 0.0.14
+    repository: oci://ghcr.io/the-palace-company
