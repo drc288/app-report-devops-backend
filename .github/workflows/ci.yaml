@@ -1,0 +1,23 @@
+name: CI - EKS - ms-devops-backend
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "version.json"
+      - 'public/output/users.json'
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  CI-MAIN:
+    name: CI - Generando artefactos
+    if: github.event_name == 'push'
+    uses: the-palace-company/github-actions/.github/workflows/ci-eks-main.yml@main
+    secrets: inherit

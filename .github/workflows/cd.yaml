@@ -1,4 +1,4 @@
-name: CD - EKS - ms-devops-frontend
+name: CD - EKS - ms-devops-backend
 
 on:
   workflow_dispatch:
